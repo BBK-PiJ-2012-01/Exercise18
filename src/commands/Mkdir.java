@@ -28,13 +28,19 @@ public class Mkdir implements Exercise {
     @Override
     public void run() {
         String input = null;
+        System.out.print("Enter new folder name: ");
 
         do {
             try {
                 input = IOGeneric.getString();
+                if (input.isEmpty()) {
+                    System.out.println("No input, cancelling request");
+                    return;
+                }
+
                 for (String reserved_string : reserved) {
                     if (input.contains(reserved_string)) {
-                        System.out.format("Folder names can't contain '%s', try again:\n", reserved_string);
+                        System.out.format("Folder names can't contain '%s', try again: ", reserved_string);
                         input = null;
                         break;
                     }

@@ -1,6 +1,7 @@
 import BBK.PiJ01.common.BadInput;
 import BBK.PiJ01.common.Exercise;
 import BBK.PiJ01.common.ExerciseChooser;
+import commands.Cat;
 import commands.Ls;
 import commands.Mkdir;
 
@@ -22,6 +23,7 @@ public class Main {
 
         exercises.add(new Ls());
         exercises.add(new Mkdir());
+        exercises.add(new Cat());
 
 
         ExerciseChooser ech = new ExerciseChooser(exercises);
