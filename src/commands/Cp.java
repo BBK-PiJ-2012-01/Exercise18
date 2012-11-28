@@ -5,8 +5,6 @@ import BBK.PiJ01.common.Exercise;
 import BBK.PiJ01.common.IOGeneric;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -94,7 +92,11 @@ public class Cp implements Exercise {
         copy(source_file, destination_file);
     }
 
-    public static void copy(File source_file, File destination_file) {
+    private void copy(File source_file, File destination_file) {
+        copyFromTo(source_file, destination_file);
+    }
+
+    public static void copyFromTo(File source_file, File destination_file) {
         BufferedReader in;
         try {
             in = new BufferedReader(new FileReader(source_file));

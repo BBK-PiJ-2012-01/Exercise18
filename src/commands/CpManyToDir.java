@@ -71,7 +71,7 @@ public class CpManyToDir implements Exercise {
         File destination;
         for (File file : files) {
             destination = new File(folder.getPath() + File.separator + file.getName());
-            Cp.copy(file, destination);
+            Cp.copyFromTo(file, destination);
         }
 
     }

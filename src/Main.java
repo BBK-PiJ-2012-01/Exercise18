@@ -2,6 +2,8 @@ import BBK.PiJ01.common.BadInput;
 import BBK.PiJ01.common.Exercise;
 import BBK.PiJ01.common.ExerciseChooser;
 import commands.*;
+import other.BinaryCp;
+import other.TempAverages;
 
 import java.util.ArrayList;
 
@@ -26,6 +28,9 @@ public class Main {
         exercises.add(new CpManyToDir());
         exercises.add(new Tr());
         exercises.add(new Sort());
+        exercises.add(new Uniq());
+        exercises.add(new TempAverages());
+        exercises.add(new BinaryCp());
 
         ExerciseChooser ech = new ExerciseChooser(exercises);
         ech.run();
