@@ -25,17 +25,17 @@ public class Cp implements Exercise {
         return "Copies one file to another filename";
     }
 
-    @Override
-    public void run() {
+    public static File getSourceFile() {
         String input;
-        File source_file = null, destination_file = null;
+        File source_file = null;
 
         System.out.print("Enter source filename: ");
         do {
             try {
                 input = IOGeneric.getString();
-                if (input.isEmpty())
-                    System.out.println("Received empty string: cancelling request.");
+                if (input.isEmpty()) {
+                    return null;
+                }
 
                 source_file = new File(input);
 
@@ -48,6 +48,19 @@ public class Cp implements Exercise {
             }
         } while (source_file == null);
 
+        return source_file;
+    }
+
+    @Override
+    public void run() {
+        String input;
+        File source_file = getSourceFile(), destination_file;
+
+        if (source_file == null) {
+            System.out.println("Received empty string: cancelling request.");
+            return;
+        }
+
 
         do {
             System.out.print("Enter destination filename: ");
@@ -59,61 +72,66 @@ public class Cp implements Exercise {
                 destination_file = new File(input);
 
                 if (destination_file.exists()) {
+                    if (destination_file.equals(source_file)) {
+                        System.out.print("Destination file can't be the same as source file! try again: ");
+                        break;
+                    }
+
                     System.out.print("Destination file already exists! Overwrite? [y/n]: ");
                     if (!IOGeneric.getString().toLowerCase().equals("y"))
                         destination_file = null;
                     else {
                         // delete destination file
                         destination_file.delete();
-                        destination_file.createNewFile();
                     }
                 }
             } catch (BadInput badInput) {
-            } catch (IOException e) {
-                throw new RuntimeException("Couldn't overwrite destination file.");
+                throw new RuntimeException("Bad input...");
             }
+
         } while (destination_file == null);
 
-        try {
-            destination_file.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException("Couldn't create new file: " + destination_file.getName());
-        }
+        copy(source_file, destination_file);
+    }
 
+    public static void copy(File source_file, File destination_file) {
         BufferedReader in;
-
         try {
             in = new BufferedReader(new FileReader(source_file));
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("Couldn't read source file, even though I just checked it exists...");
+            throw new RuntimeException("Couldn't read source file, even though I just checked it exists...", e);
         }
 
         PrintWriter out;
         try {
             out = new PrintWriter(destination_file);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("Couldn't open destination file for writing, even though I just checked it exists...");
+            throw new RuntimeException("Couldn't open destination file for writing...", e);
         }
 
         String source_line;
 
-        while (true) {
-            try {
+        try {
+            while (true) {
                 source_line = in.readLine();
-                out.write(source_line);
-            } catch (IOException e) {
-                out.close();
-                destination_file.delete();
-                throw new RuntimeException("IOException whilst writing to destination file! Cleaning up...");
-            } finally {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("Couldn't close input stream");
-                }
-                out.close();
-            }
-        }
 
+                if (source_line == null)
+                    break;
+
+                out.write(source_line);
+                out.write('\n');
+            }
+        } catch (IOException e) {
+            out.close();
+            destination_file.delete();
+            throw new RuntimeException("IOException whilst writing to destination file! Cleaning up...", e);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                throw new RuntimeException("Couldn't close input stream", e);
+            }
+            out.close();
+        }
     }
 }

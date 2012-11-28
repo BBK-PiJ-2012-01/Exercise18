@@ -1,9 +1,7 @@
 import BBK.PiJ01.common.BadInput;
 import BBK.PiJ01.common.Exercise;
 import BBK.PiJ01.common.ExerciseChooser;
-import commands.Cat;
-import commands.Ls;
-import commands.Mkdir;
+import commands.*;
 
 import java.util.ArrayList;
 
@@ -24,7 +22,10 @@ public class Main {
         exercises.add(new Ls());
         exercises.add(new Mkdir());
         exercises.add(new Cat());
-
+        exercises.add(new Cp());
+        exercises.add(new CpManyToDir());
+        exercises.add(new Tr());
+        exercises.add(new Sort());
 
         ExerciseChooser ech = new ExerciseChooser(exercises);
         ech.run();
